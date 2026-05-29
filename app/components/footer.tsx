@@ -83,8 +83,8 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Beranda</Link></li>
             <li><Link href="/katalog" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Katalog Produk</Link></li>
             <li><Link href="/kisah-kreator" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Kisah Kreator</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Tentang Kami</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Hubungi Kami</Link></li>
+            <li><Link href="/tentang-kami" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Tentang Kami</Link></li>
+            <li><Link href="/hubungi-kami" className="hover:text-white transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-px after:bottom-0 after:left-0 after:bg-[#E2B08B] after:transition-transform hover:after:scale-x-100 pb-1 inline-block">Hubungi Kami</Link></li>
           </ul>
         </div>
 
@@ -92,9 +92,9 @@ export default function Footer() {
         <div className="md:col-span-2">
           <h3 className="text-white font-semibold mb-6">Legal</h3>
           <ul className="space-y-4 text-sm">
-            <li><Link href="#" className="hover:text-white transition-colors pb-1 inline-block">Kebijakan Privasi</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors pb-1 inline-block">Syarat & Ketentuan</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors pb-1 inline-block">Lisensi Hak Cipta</Link></li>
+            <li><Link href="/kebijakan-privasi" className="hover:text-white transition-colors pb-1 inline-block">Kebijakan Privasi</Link></li>
+            <li><Link href="/syarat-ketentuan" className="hover:text-white transition-colors pb-1 inline-block">Syarat & Ketentuan</Link></li>
+            <li><Link href="/lisensi" className="hover:text-white transition-colors pb-1 inline-block">Lisensi Hak Cipta</Link></li>
           </ul>
         </div>
 

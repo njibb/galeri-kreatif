@@ -9,26 +9,36 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  
-  // --- STATE BARU UNTUK MENU HP (HAMBURGER) ---
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   
   const { cartItems, removeFromCart, cartTotal } = useCart(); 
 
+  const isFormValid = isRegisterMode 
+    ? name.trim() !== '' && email.trim() !== '' && password.trim() !== ''
+    : email.trim() !== '' && password.trim() !== '';
+
+  const openLoginModal = () => {
+    setIsLoginOpen(true);
+    setIsRegisterMode(false);
+    setName('');
+    setEmail('');
+    setPassword('');
+  };
+
   return (
     <>
-      {/* Padding diperkecil sedikit di HP (px-5) dan normal di Desktop (md:px-10) */}
       <nav className="flex justify-between items-center px-5 md:px-10 py-4 md:py-5 bg-white sticky top-0 z-40 border-b border-gray-100 shadow-sm relative">
         
-        {/* Bagian Kiri: Logo */}
         <Link href="/" className="flex items-center shrink-0">
-          {/* Ukuran logo disesuaikan lebih pas di HP */}
           <div className="relative w-12 h-12 md:w-20 md:h-20">
             <Image src="/logo.png" alt="Logo Galeri Kreatif" fill style={{ objectFit: 'contain' }} priority />
           </div>
         </Link>
 
-        {/* Bagian Tengah: Search Bar (HANYA MUNCUL DI DESKTOP - hidden md:flex) */}
         <div className="hidden md:flex flex-1 max-w-md mx-8">
           <div className="relative w-full flex items-center bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 focus-within:border-[#B07D60] focus-within:bg-white transition-all hover:shadow-sm">
             <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,22 +48,24 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Bagian Kanan: Menu, Cart & Hamburger */}
         <div className="flex items-center gap-4 md:gap-8 shrink-0">
           
-          {/* MENU TEKS (HANYA MUNCUL DI DESKTOP - hidden md:flex) */}
           <div className="hidden md:flex space-x-8 text-sm font-medium items-center text-gray-700">
+            {/* --- TAMBAHAN LINK MULAI BERJUALAN DI SINI --- */}
+            <Link href="/jual" className="text-[#B07D60] font-bold hover:text-[#8D6E63] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-[#B07D60] after:scale-x-0 hover:after:scale-x-100 after:transition-transform">
+              Mulai Berjualan
+            </Link>
+            
             <Link href="/katalog" className="hover:text-[#B07D60] transition-colors">Katalog</Link>
             <Link href="/kisah-kreator" className="hover:text-[#B07D60] transition-colors">Kisah Kreator</Link>
             <button 
-              onClick={() => { setIsLoginOpen(true); setIsRegisterMode(false); }}
+              onClick={openLoginModal}
               className="hover:text-[#B07D60] transition-colors font-medium"
             >
               Login/Daftar
             </button>
           </div>
           
-          {/* IKON KERANJANG & POPOVER (MUNCUL DI HP & DESKTOP) */}
           <div className="relative">
             <div 
               className="cursor-pointer hover:scale-105 transition-transform flex items-center gap-1.5 p-1 md:p-2"
@@ -67,7 +79,6 @@ export default function Navbar() {
               </span>
             </div>
 
-            {/* Kotak Pop-over Keranjang (Disesuaikan lebarnya untuk HP) */}
             {isCartOpen && (
               <div className="absolute right-0 top-full mt-4 w-[300px] md:w-[360px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-200">
                 {cartItems.length === 0 ? (
@@ -133,7 +144,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* TOMBOL HAMBURGER (HANYA MUNCUL DI HP - md:hidden) */}
           <button 
             className="md:hidden text-gray-800 p-1 focus:outline-none"
             onClick={() => setIsMobileMenuOpen(true)}
@@ -146,19 +156,12 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* --- MENU SIDEBAR HP (OFF-CANVAS) --- */}
+      {/* --- MENU SIDEBAR HP --- */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex justify-end md:hidden">
-          {/* Background gelap (Klik untuk tutup) */}
-          <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" 
-            onClick={() => setIsMobileMenuOpen(false)}
-          ></div>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
           
-          {/* Panel Menu Putih dari Kanan */}
           <div className="relative w-64 bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
-            
-            {/* Header Sidebar */}
             <div className="p-5 border-b border-gray-100 flex justify-between items-center">
               <span className="font-serif font-bold text-lg text-gray-900">Menu</span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-gray-400 hover:text-gray-800 rounded-full hover:bg-gray-100">
@@ -166,41 +169,25 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Link Navigasi HP */}
             <div className="flex flex-col p-4 space-y-2">
-              <Link 
-                href="/" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors"
-              >
-                Beranda
-              </Link>
-              <Link 
-                href="/katalog" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors"
-              >
-                Katalog Produk
-              </Link>
-              <Link 
-                href="/kisah-kreator" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors"
-              >
-                Kisah Kreator
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors">Beranda</Link>
+              <Link href="/katalog" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors">Katalog Produk</Link>
+              <Link href="/kisah-kreator" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] rounded-xl transition-colors">Kisah Kreator</Link>
+              
+              {/* --- TAMBAHAN LINK MULAI BERJUALAN DI MOBILE --- */}
+              <Link href="/jual" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-sm font-bold text-[#B07D60] hover:bg-gray-50 rounded-xl transition-colors border border-[#B07D60]/20 mt-2">
+                Mulai Berjualan
               </Link>
             </div>
 
-            {/* Tombol Login HP di Bawah */}
             <div className="mt-auto p-5 border-t border-gray-100">
               <button 
-                onClick={() => { setIsMobileMenuOpen(false); setIsLoginOpen(true); setIsRegisterMode(false); }}
+                onClick={() => { setIsMobileMenuOpen(false); openLoginModal(); }}
                 className="w-full bg-[#B07D60] text-white font-bold py-3 rounded-xl hover:bg-[#8D6E63] transition-colors shadow-sm"
               >
                 Login / Daftar
               </button>
             </div>
-
           </div>
         </div>
       )}
@@ -209,13 +196,49 @@ export default function Navbar() {
       {isLoginOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onClick={() => setIsLoginOpen(false)}></div>
-          <div className="bg-white w-full max-w-[400px] rounded-2xl shadow-2xl relative z-10 overflow-hidden animate-in fade-in zoom-in duration-200">
-            <button onClick={() => setIsLoginOpen(false)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 transition-colors rounded-full hover:bg-gray-100">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div className="p-8">
-              <h2 className="text-3xl font-bold text-gray-900 font-serif mb-8">{isRegisterMode ? 'Daftar' : 'Masuk'}</h2>
-              <button className="w-full bg-[#B07D60] text-white font-bold py-3.5 rounded-lg hover:bg-[#8D6E63] transition-colors mb-6 shadow-md shadow-[#B07D60]/20">Selanjutnya</button>
+          <div className="bg-white w-full max-w-[420px] rounded-2xl shadow-2xl relative z-10 overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center p-6 pb-2">
+              <h2 className="text-2xl font-bold text-gray-900">{isRegisterMode ? 'Daftar' : 'Masuk'}</h2>
+              <div className="flex items-center gap-4">
+                <button type="button" onClick={() => { setIsRegisterMode(!isRegisterMode); setName(''); setEmail(''); setPassword(''); }} className="font-bold text-[#B07D60] text-sm hover:underline transition-all">
+                  {isRegisterMode ? 'Masuk' : 'Daftar'}
+                </button>
+                <button onClick={() => setIsLoginOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div className="p-6 pt-4">
+              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Siap disambung ke API Back-end cuy!'); }}>
+                {isRegisterMode && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-[#B07D60] focus:ring-1 focus:ring-[#B07D60] transition-all" />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nomor HP atau Email</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-[#B07D60] focus:ring-1 focus:ring-[#B07D60] transition-all" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kata Sandi</label>
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-[#B07D60] focus:ring-1 focus:ring-[#B07D60] transition-all" />
+                </div>
+                {!isRegisterMode && (
+                  <div className="flex justify-end pt-1"><a href="#" className="text-sm font-medium text-[#B07D60] hover:underline">Lupa kata sandi?</a></div>
+                )}
+                <button type="submit" disabled={!isFormValid} className={`w-full font-bold py-3.5 rounded-xl transition-all mt-4 text-sm ${isFormValid ? 'bg-[#B07D60] text-white hover:bg-[#8D6E63] shadow-md' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>Selanjutnya</button>
+              </form>
+              <div className="flex items-center gap-4 my-6">
+                <div className="flex-1 h-px bg-gray-200"></div>
+                <span className="text-xs text-gray-400 font-medium">atau {isRegisterMode ? 'daftar' : 'masuk'} dengan</span>
+                <div className="flex-1 h-px bg-gray-200"></div>
+              </div>
+              <button type="button" className="w-full bg-white border border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition-all mb-3 flex justify-center items-center gap-2 text-sm">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                Scan Kode QR
+              </button>
+              <button type="button" className="w-full bg-white border border-gray-300 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition-all flex justify-center items-center gap-2 text-sm">Metode Lain</button>
             </div>
           </div>
         </div>

@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
                   onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
                   className="px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
                 >&minus;</button>
-                <span className="px-4 font-bold text-sm w-12 text-center border-l border-r border-gray-100">{qty}</span>
+                <span className="px-4 font-bold text-sm text-gray-900 w-12 text-center border-l border-r border-gray-100">{qty}</span>
                 <button 
                   onClick={() => setQty(qty < product.stock ? qty + 1 : product.stock)}
                   className="px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"

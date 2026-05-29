@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'; // Wajib ada karena kita menggunakan useState untuk interaktivitas
+'use client'; 
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+// --- 1. TAMBAHKAN IMPORT LINK DI SINI ---
+import Link from 'next/link'; 
 
 // --- DATA MOCKUP KREATOR ---
-// Di dunia nyata, data ini nanti diambil dari database
 const creatorsData = [
   {
     id: 'kasongan',
     name: 'Mbah Nangsib',
     location: 'Desa Kasongan, Yogyakarta',
     role: 'Maestro Gerabah Terracotta',
-    image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=600', // Foto ilustrasi pengrajin
+    image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=600', 
     story: 'Selama lebih dari 40 tahun, Mbah Nangsib telah berkutat dengan tanah liat. Baginya, gerabah bukan sekadar benda fungsional, melainkan "doa yang dipadatkan". Melalui program pendampingan mahasiswa, karya otentik Mbah Nangsib kini dikurasi dan dipasarkan secara digital, menjaga warisan leluhur agar tidak lekang oleh zaman.',
     products: [
-      { id: 101, title: 'Guci Terracotta Klasik', price: 'Rp 350.000', img: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=400' }, // Ganti link img nanti
-      { id: 102, title: 'Vas Meja Minimalis', price: 'Rp 150.000', img: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?q=80&w=400' },
-      { id: 103, title: 'Set Cangkir Tanah Liat', price: 'Rp 200.000', img: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?q=80&w=400' }
+      // --- 2. ID DISAMAKAN DENGAN DATABASE KATALOG (4 & 6) ---
+      { id: 4, title: 'Guci Terracotta Klasik', price: 'Rp 350.000', img: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=400' }, 
+      { id: 6, title: 'Minimalist Clay Vase Set', price: 'Rp 180.000', img: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?q=80&w=400' }
     ]
   },
   {
@@ -28,21 +29,20 @@ const creatorsData = [
     image: 'https://images.unsplash.com/photo-1528150177508-7cc0c36cda5c?q=80&w=600',
     story: 'Bagi perempuan Sade, menenun adalah syarat kedewasaan. Ina Nurani mewarisi motif-motif kuno yang menceritakan keseimbangan alam. Dengan sentuhan technopreneurship, kain tenun Ina kini tidak hanya menjadi pakaian adat, tetapi juga diadaptasi menjadi elemen fashion modern yang digemari pasar luas.',
     products: [
-      { id: 201, title: 'Kain Tenun Motif Subahnale', price: 'Rp 850.000', img: 'https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?q=80&w=400' },
-      { id: 202, title: 'Scarf Tenun Pewarna Alami', price: 'Rp 250.000', img: 'https://images.unsplash.com/photo-1584931423298-c576fda54bd2?q=80&w=400' }
+      // --- 2. ID DISAMAKAN DENGAN DATABASE KATALOG (1 & 2) ---
+      { id: 1, title: 'Woven Bag Modern', price: 'Rp 450.000', img: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=400' },
+      { id: 2, title: 'Hand-Painted Batik Textile', price: 'Rp 650.000', img: 'https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?q=80&w=400' }
     ]
   }
 ];
 
 export default function KisahKreatorPage() {
-  // State untuk melacak kreator mana yang sedang diklik/dipilih
-  // Jika null, berarti menampilkan halaman daftar desa/kreator
   const [selectedCreator, setSelectedCreator] = useState<any>(null);
 
   return (
     <div className="min-h-screen bg-[#F9F9F9] font-sans text-gray-900 py-16 px-6 md:px-20">
       
-      {/* TAMPILAN 1: JIKA BELUM ADA KREATOR YANG DIPILIH (LISTING MODE) */}
+      {/* TAMPILAN 1: JIKA BELUM ADA KREATOR YANG DIPILIH */}
       {!selectedCreator && (
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -81,11 +81,10 @@ export default function KisahKreatorPage() {
         </div>
       )}
 
-      {/* TAMPILAN 2: JIKA KREATOR SUDAH DIPILIH (DETAIL & PRODUCT MODE) */}
+      {/* TAMPILAN 2: JIKA KREATOR SUDAH DIPILIH */}
       {selectedCreator && (
         <div className="max-w-7xl mx-auto animate-fadeIn">
           
-          {/* Tombol Kembali */}
           <button 
             onClick={() => setSelectedCreator(null)}
             className="mb-8 flex items-center gap-2 text-gray-500 hover:text-[#B07D60] transition-colors font-medium text-sm"
@@ -93,7 +92,6 @@ export default function KisahKreatorPage() {
             &larr; Kembali ke Daftar Kreator
           </button>
 
-          {/* Profil Cerita Kreator */}
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col md:flex-row mb-16">
             <div className="md:w-2/5 relative h-[400px] md:h-auto">
                <Image src={selectedCreator.image} alt={selectedCreator.name} fill style={{ objectFit: 'cover' }} />
@@ -106,12 +104,11 @@ export default function KisahKreatorPage() {
                  {selectedCreator.story}
                </p>
                <div className="inline-block bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-sm border border-gray-200 w-max">
-                  📍 {selectedCreator.location}
+                 📍 {selectedCreator.location}
                </div>
             </div>
           </div>
 
-          {/* Bagian Etalase Produk Khusus Kreator Ini */}
           <div>
             <h2 className="text-2xl font-serif text-gray-900 mb-8 flex items-center gap-3">
               Karya dari {selectedCreator.name}
@@ -120,7 +117,13 @@ export default function KisahKreatorPage() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {selectedCreator.products.map((product: any) => (
-                <div key={product.id} className="group cursor-pointer">
+                
+             
+                <Link 
+                  href={`/katalog/${product.id}`} 
+                  key={product.id} 
+                  className="group cursor-pointer block"
+                >
                   <div className="w-full h-64 rounded-2xl overflow-hidden relative mb-4 bg-gray-100 border border-gray-100">
                     <Image 
                       src={product.img} 
@@ -130,9 +133,10 @@ export default function KisahKreatorPage() {
                       className="transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-sm mb-1">{product.title}</h3>
+                  <h3 className="font-bold text-gray-900 text-sm mb-1 group-hover:text-[#B07D60] transition-colors">{product.title}</h3>
                   <p className="font-bold text-[#B07D60] text-sm mt-1">{product.price}</p>
-                </div>
+                </Link>
+
               ))}
             </div>
           </div>

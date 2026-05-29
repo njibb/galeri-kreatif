@@ -72,7 +72,7 @@ export default function KatalogPage() {
 
         <div className="flex flex-col md:flex-row gap-8">
           
-          <aside className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit sticky top-24">
+          <aside className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit">
             <div className="mb-6">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Cari di Katalog</h3>
               <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
