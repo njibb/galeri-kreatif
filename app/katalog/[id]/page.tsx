@@ -136,22 +136,23 @@ export default function ProductDetailPage() {
 
             <div className="h-px bg-gray-100 w-full mb-8"></div>
 
-            {/* Area Kuantitas */}
-            <div className="flex items-center gap-5 mb-6">
-              <span className="text-sm font-bold text-gray-900 uppercase tracking-wider">Kuantitas</span>
-              <div className="flex items-center border border-gray-200 rounded-xl bg-white shadow-sm overflow-hidden">
+            {/* 👇 AREA KUANTITAS YANG SUDAH DIPERBAIKI 👇 */}
+            <div className="flex flex-wrap items-center gap-3 md:gap-5 mb-6">
+              <span className="text-sm font-bold text-gray-900 uppercase tracking-wider shrink-0">Kuantitas</span>
+              <div className="flex items-center border border-gray-200 rounded-xl bg-white shadow-sm overflow-hidden shrink-0">
                 <button 
                   onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
-                  className="px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
+                  className="px-4 md:px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
                 >&minus;</button>
-                <span className="px-4 font-bold text-sm text-gray-900 w-12 text-center border-l border-r border-gray-100">{qty}</span>
+                <span className="px-3 md:px-4 font-bold text-sm text-gray-900 w-10 md:w-12 text-center border-l border-r border-gray-100">{qty}</span>
                 <button 
                   onClick={() => setQty(qty < product.stock ? qty + 1 : product.stock)}
-                  className="px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
+                  className="px-4 md:px-5 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
                 >&#43;</button>
               </div>
               <span className="text-xs font-medium text-gray-400">Sisa {product.stock} stok</span>
             </div>
+            {/* 👆 BATAS PERBAIKAN KUANTITAS 👆 */}
 
             {/* Tombol Aksi */}
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
