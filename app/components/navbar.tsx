@@ -1,4 +1,3 @@
-
 'use client'; 
 
 import React, { useState, useEffect } from 'react';
@@ -243,21 +242,33 @@ export default function Navbar() {
                     
                     {/* Menampilkan Foto Profil atau Inisial (Versi HP) */}
                     {loggedInUser.profile_picture ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden relative border border-gray-200">
+                      <div className="w-10 h-10 rounded-full overflow-hidden relative border border-gray-200 shrink-0">
                         <Image src={loggedInUser.profile_picture} alt="Profil" fill style={{ objectFit: 'cover' }} />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 bg-[#B07D60] text-white rounded-full flex items-center justify-center font-bold text-lg uppercase">
+                      <div className="w-10 h-10 bg-[#B07D60] text-white rounded-full flex items-center justify-center font-bold text-lg uppercase shrink-0">
                         {loggedInUser.name.charAt(0)}
                       </div>
                     )}
                     
-                    <div>
-                      <p className="font-bold text-gray-900 text-sm truncate w-32">{loggedInUser.name}</p>
-                      <p className="text-xs text-gray-500 truncate w-32">{loggedInUser.email}</p>
+                    <div className="overflow-hidden">
+                      <p className="font-bold text-gray-900 text-sm truncate">{loggedInUser.name}</p>
+                      <p className="text-xs text-gray-500 truncate">{loggedInUser.email}</p>
                     </div>
                   </div>
-                  <button onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} className="w-full bg-red-50 text-red-600 border border-red-100 font-bold py-3 rounded-xl hover:bg-red-100 transition-colors shadow-sm text-sm">Keluar Akun</button>
+
+                  {/* 👇 TAMBAHAN MENU AKUN & PESANAN UNTUK HP 👇 */}
+                  <div className="flex flex-col gap-1 mb-2">
+                    <Link href="/profil" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
+                      <span className="text-lg">👤</span> Akun Saya
+                    </Link>
+                    <Link href="/pesanan" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
+                      <span className="text-lg">📦</span> Pesanan Saya
+                    </Link>
+                  </div>
+                  {/* 👆 BATAS PENAMBAHAN 👆 */}
+
+                  <button onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} className="w-full bg-red-50 text-red-600 border border-red-100 font-bold py-3 rounded-xl hover:bg-red-100 transition-colors shadow-sm text-sm mt-1">Keluar Akun</button>
                 </div>
               ) : (
                 <button onClick={() => { setIsMobileMenuOpen(false); openLoginModal(); }} className="w-full bg-[#B07D60] text-white font-bold py-3 rounded-xl hover:bg-[#8D6E63] transition-colors shadow-sm">Login / Daftar</button>
