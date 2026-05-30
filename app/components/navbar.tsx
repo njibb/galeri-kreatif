@@ -11,11 +11,13 @@ export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  // STATE BARU BUAT MENU LIPAT (ACCORDION) DI HP
+  const [isMobileProfileOpen, setIsMobileProfileOpen] = useState(false);
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  // --- STATE UNTUK MENYIMPAN DATA USER YANG SUDAH LOGIN ---
   const [loggedInUser, setLoggedInUser] = useState<{name: string, email: string, profile_picture?: string} | null>(null);
 
   const { cartItems, removeFromCart, cartTotal } = useCart(); 
@@ -24,7 +26,6 @@ export default function Navbar() {
     ? name.trim() !== '' && email.trim() !== '' && password.trim() !== ''
     : email.trim() !== '' && password.trim() !== '';
 
-  // --- CEK LOCAL STORAGE & DENGERIN UPDATE PROFIL ---
   useEffect(() => {
     const loadUser = () => {
       const storedUser = localStorage.getItem('user');
@@ -33,12 +34,8 @@ export default function Navbar() {
       }
     };
 
-    loadUser(); // Panggil saat pertama kali buka website
-
-    // Pasang kuping buat dengerin event 'profileUpdated' dari halaman Profil
+    loadUser(); 
     window.addEventListener('profileUpdated', loadUser);
-    
-    // Copot kuping kalau pindah halaman biar gak bocor memori
     return () => window.removeEventListener('profileUpdated', loadUser);
   }, []);
 
@@ -50,11 +47,11 @@ export default function Navbar() {
     setPassword('');
   };
 
-  // --- FUNGSI LOGOUT ---
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setLoggedInUser(null);
+    setIsMobileProfileOpen(false); // Tutup lipatan kalau logout
     alert('Berhasil keluar abangku! 👋');
   };
 
@@ -81,10 +78,7 @@ export default function Navbar() {
         if (!isRegisterMode && data.token) {
            localStorage.setItem('token', data.token);
            localStorage.setItem('user', JSON.stringify(data.user));
-           
-           // Langsung update State User biar UI Navbar berubah tanpa perlu refresh
            setLoggedInUser(data.user);
-           
            setName(''); setEmail(''); setPassword('');
            setIsLoginOpen(false); 
         } else if (isRegisterMode) {
@@ -128,11 +122,8 @@ export default function Navbar() {
             <Link href="/katalog" className="hover:text-[#B07D60] transition-colors">Katalog</Link>
             <Link href="/kisah-kreator" className="hover:text-[#B07D60] transition-colors">Kisah Kreator</Link>
             
-            {/* --- LOGIKA PERUBAHAN UI PROFIL vs LOGIN --- */}
             {loggedInUser ? (
               <div className="relative group cursor-pointer flex items-center gap-2 py-2">
-                
-                {/* Menampilkan Foto Profil atau Inisial */}
                 {loggedInUser.profile_picture ? (
                   <div className="w-8 h-8 rounded-full overflow-hidden relative border border-gray-200">
                     <Image src={loggedInUser.profile_picture} alt="Profil" fill style={{ objectFit: 'cover' }} />
@@ -147,26 +138,14 @@ export default function Navbar() {
                   {loggedInUser.name.split(' ')[0]}
                 </span>
 
-                {/* Dropdown Menu Profil ala Shopee */}
                 <div className="absolute right-0 top-full w-40 bg-white rounded-sm shadow-md border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
-                  <Link href="/profil" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors">
-                    Akun Saya
-                  </Link>
-                  <Link href="/pesanan" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors">
-                    Pesanan Saya
-                  </Link>
-                  <button 
-                    onClick={handleLogout} 
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors"
-                  >
-                    Log Out
-                  </button>
+                  <Link href="/profil" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors">Akun Saya</Link>
+                  <Link href="/pesanan" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors">Pesanan Saya</Link>
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#B07D60] transition-colors">Log Out</button>
                 </div>
               </div>
             ) : (
-              <button onClick={openLoginModal} className="hover:text-[#B07D60] transition-colors font-medium">
-                Login/Daftar
-              </button>
+              <button onClick={openLoginModal} className="hover:text-[#B07D60] transition-colors font-medium">Login/Daftar</button>
             )}
           </div>
           
@@ -235,38 +214,47 @@ export default function Navbar() {
               <Link href="/jual" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-sm font-bold text-[#B07D60] hover:bg-gray-50 rounded-xl transition-colors border border-[#B07D60]/20 mt-2">Mulai Berjualan</Link>
             </div>
             <div className="mt-auto p-5 border-t border-gray-100">
-              {/* LOGIKA PROFIL UNTUK TAMPILAN HP */}
+              
               {loggedInUser ? (
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 mb-2 px-2">
-                    
-                    {/* Menampilkan Foto Profil atau Inisial (Versi HP) */}
-                    {loggedInUser.profile_picture ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden relative border border-gray-200 shrink-0">
-                        <Image src={loggedInUser.profile_picture} alt="Profil" fill style={{ objectFit: 'cover' }} />
+                <div className="flex flex-col gap-2">
+                  
+                  {/* 👇 TOMBOL ACCORDION PROFIL HP 👇 */}
+                  <button 
+                    onClick={() => setIsMobileProfileOpen(!isMobileProfileOpen)} 
+                    className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-xl transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      {loggedInUser.profile_picture ? (
+                        <div className="w-10 h-10 rounded-full overflow-hidden relative border border-gray-200 shrink-0">
+                          <Image src={loggedInUser.profile_picture} alt="Profil" fill style={{ objectFit: 'cover' }} />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 bg-[#B07D60] text-white rounded-full flex items-center justify-center font-bold text-lg uppercase shrink-0">
+                          {loggedInUser.name.charAt(0)}
+                        </div>
+                      )}
+                      <div className="overflow-hidden">
+                        <p className="font-bold text-gray-900 text-sm truncate">{loggedInUser.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{loggedInUser.email}</p>
                       </div>
-                    ) : (
-                      <div className="w-10 h-10 bg-[#B07D60] text-white rounded-full flex items-center justify-center font-bold text-lg uppercase shrink-0">
-                        {loggedInUser.name.charAt(0)}
-                      </div>
-                    )}
-                    
-                    <div className="overflow-hidden">
-                      <p className="font-bold text-gray-900 text-sm truncate">{loggedInUser.name}</p>
-                      <p className="text-xs text-gray-500 truncate">{loggedInUser.email}</p>
                     </div>
-                  </div>
+                    {/* Icon Panah Kecil (Muter otomatis kalau isMobileProfileOpen true) */}
+                    <svg className={`w-5 h-5 text-gray-500 transition-transform duration-200 shrink-0 ${isMobileProfileOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </button>
 
-                  {/* 👇 TAMBAHAN MENU AKUN & PESANAN UNTUK HP 👇 */}
-                  <div className="flex flex-col gap-1 mb-2">
-                    <Link href="/profil" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
-                      <span className="text-lg">👤</span> Akun Saya
-                    </Link>
-                    <Link href="/pesanan" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
-                      <span className="text-lg">📦</span> Pesanan Saya
-                    </Link>
-                  </div>
-                  {/* 👆 BATAS PENAMBAHAN 👆 */}
+                  {/* 👇 ISI MENU YANG MUNCUL KALAU DIPENCET 👇 */}
+                  {isMobileProfileOpen && (
+                    <div className="flex flex-col gap-1 mb-2 px-2 animate-in slide-in-from-top-2 duration-200">
+                      <Link href="/profil" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
+                        <span className="text-lg">👤</span> Akun Saya
+                      </Link>
+                      <Link href="/pesanan" onClick={() => setIsMobileMenuOpen(false)} className="px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#B07D60] flex items-center gap-3 transition-colors rounded-lg hover:bg-gray-50">
+                        <span className="text-lg">📦</span> Pesanan Saya
+                      </Link>
+                    </div>
+                  )}
 
                   <button onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }} className="w-full bg-red-50 text-red-600 border border-red-100 font-bold py-3 rounded-xl hover:bg-red-100 transition-colors shadow-sm text-sm mt-1">Keluar Akun</button>
                 </div>
